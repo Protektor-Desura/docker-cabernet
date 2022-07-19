@@ -1,8 +1,24 @@
-locast2plex:
-    image: tgorg/locast2plex
+version: "3.1"
+services:
+  cabernet:
+    container_name: cabernet
+    hostname: cabernet
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=America/Chicago
+    image: ghcr.io/cabernetwork/cabernet:latest
+    networks:
+      - archon
     ports:
-      - "6077:6077"
-      - "1900:1900/udp"
+      - "5004:5004"    # Port used to stream
+      - "6077:6077"    # Web Interface Port
+      - "65001:65001"  # HDHomeRun Port 
     restart: unless-stopped
     volumes:
-      - ./config.ini:/app/config/config.ini
+      - /home/docker/cabernet:/app/data/
+
+
+networks:
+  archon:
+    external: true
